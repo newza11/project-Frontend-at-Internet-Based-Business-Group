@@ -76,7 +76,7 @@ export default function App() {
     setUsers((current) => [...current, { id: newId(), ...values }]);
     addForm.resetFields();
     setIsAddModalOpen(false);
-    messageApi.success(`เพิ่ม ${values.name} เรียบร้อยแล้ว`);
+    messageApi.success(`${values.name} has been added`);
   };
 
   const beginEdit = (record) => {
@@ -91,7 +91,7 @@ export default function App() {
         current.map((user) => (user.id === id ? { ...user, ...values } : user)),
       );
       setEditingId(null);
-      messageApi.success('บันทึกการแก้ไขแล้ว');
+      messageApi.success('Changes saved successfully');
     } catch {
       // Ant Design displays validation feedback inside the edited row.
     }
@@ -100,28 +100,28 @@ export default function App() {
   const deleteUser = (id) => {
     setUsers((current) => current.filter((user) => user.id !== id));
     if (editingId === id) setEditingId(null);
-    messageApi.success('ลบผู้ใช้แล้ว');
+    messageApi.success('User deleted successfully');
   };
 
   const columns = [
     {
-      title: 'ลำดับ',
+      title: 'No.',
       key: 'index',
       width: 100,
       align: 'center',
       render: (_, __, index) => index + 1,
     },
     {
-      title: 'ชื่อ',
+      title: 'Name',
       dataIndex: 'name',
       key: 'name',
       render: (value, record) =>
         editingId === record.id ? (
           <Form.Item
             name="name"
-            rules={[{ required: true, whitespace: true, message: 'กรุณากรอกชื่อ' }]}
+            rules={[{ required: true, whitespace: true, message: 'Please enter a name' }]}
           >
-            <Input aria-label="แก้ไขชื่อ" maxLength={60} />
+            <Input aria-label="Edit name" maxLength={60} />
           </Form.Item>
         ) : (
           <Space>
@@ -131,7 +131,7 @@ export default function App() {
         ),
     },
     {
-      title: 'อายุ',
+      title: 'Age',
       dataIndex: 'age',
       key: 'age',
       width: 150,
@@ -139,51 +139,51 @@ export default function App() {
         editingId === record.id ? (
           <Form.Item
             name="age"
-            rules={[{ required: true, message: 'กรุณากรอกอายุ' }]}
+            rules={[{ required: true, message: 'Please enter an age' }]}
           >
-            <InputNumber aria-label="แก้ไขอายุ" min={1} max={120} className="full-width" />
+            <InputNumber aria-label="Edit age" min={1} max={120} className="full-width" />
           </Form.Item>
         ) : (
-          <Tag color="purple">{value} ปี</Tag>
+          <Tag color="purple">{value} years</Tag>
         ),
     },
     {
-      title: 'ชื่อเล่น',
+      title: 'Nickname',
       dataIndex: 'nickname',
       key: 'nickname',
       render: (value, record) =>
         editingId === record.id ? (
           <Form.Item
             name="nickname"
-            rules={[{ required: true, whitespace: true, message: 'กรุณากรอกชื่อเล่น' }]}
+            rules={[{ required: true, whitespace: true, message: 'Please enter a nickname' }]}
           >
-            <Input aria-label="แก้ไขชื่อเล่น" maxLength={40} />
+            <Input aria-label="Edit nickname" maxLength={40} />
           </Form.Item>
         ) : (
           <Text type="secondary">{value}</Text>
         ),
     },
     {
-      title: 'จัดการ',
+      title: 'Actions',
       key: 'action',
       width: 205,
       align: 'right',
       render: (_, record) =>
         editingId === record.id ? (
           <Space>
-            <Tooltip title="บันทึก">
+            <Tooltip title="Save">
               <Button
                 type="primary"
                 shape="circle"
-                aria-label="บันทึก"
+                aria-label="Save"
                 icon={<CheckOutlined />}
                 onClick={() => saveEdit(record.id)}
               />
             </Tooltip>
-            <Tooltip title="ยกเลิก">
+            <Tooltip title="Cancel">
               <Button
                 shape="circle"
-                aria-label="ยกเลิก"
+                aria-label="Cancel"
                 icon={<CloseOutlined />}
                 onClick={() => setEditingId(null)}
               />
@@ -191,30 +191,30 @@ export default function App() {
           </Space>
         ) : (
           <Space>
-            <Tooltip title="แก้ไข">
+            <Tooltip title="Edit">
               <Button
                 className="action-button edit-button"
                 shape="circle"
-                aria-label="แก้ไข"
+                aria-label="Edit"
                 icon={<EditOutlined />}
                 disabled={editingId !== null}
                 onClick={() => beginEdit(record)}
               />
             </Tooltip>
             <Popconfirm
-              title="ลบผู้ใช้นี้?"
-              description="ข้อมูลที่ลบแล้วไม่สามารถกู้คืนได้"
-              okText="ลบ"
-              cancelText="ยกเลิก"
+              title="Delete this user?"
+              description="This action cannot be undone."
+              okText="Delete"
+              cancelText="Cancel"
               okButtonProps={{ danger: true }}
               onConfirm={() => deleteUser(record.id)}
             >
-              <Tooltip title="ลบ">
+              <Tooltip title="Delete">
                 <Button
                   className="action-button"
                   shape="circle"
                   danger
-                  aria-label="ลบ"
+                  aria-label="Delete"
                   icon={<DeleteOutlined />}
                   disabled={editingId !== null}
                 />
@@ -232,21 +232,21 @@ export default function App() {
         <Card className="table-card" bordered={false}>
           <Flex justify="space-between" align="center" gap={20} wrap className="card-heading">
             <div>
-              <Title level={2}>จัดการรายชื่อบุคคล</Title>
-              <Text type="secondary">เพิ่ม แก้ไข หรือลบข้อมูลรายชื่อบุคคล</Text>
+              <Title level={2}>People Management</Title>
+              <Text type="secondary">Add, edit, or remove people from your directory</Text>
             </div>
             <Button type="primary" size="large" icon={<PlusOutlined />} onClick={() => setIsAddModalOpen(true)}>
-              เพิ่มบุคคล
+              Add Person
             </Button>
           </Flex>
 
           <Flex justify="space-between" align="center" gap={12} wrap className="table-toolbar">
-            <Text type="secondary">พบ {filteredUsers.length} จากทั้งหมด {users.length} รายการ</Text>
+            <Text type="secondary">Showing {filteredUsers.length} of {users.length} people</Text>
             <Flex gap={10} wrap className="toolbar-actions">
               <Input
                 allowClear
                 prefix={<SearchOutlined />}
-                placeholder="ค้นหาชื่อ อายุ หรือชื่อเล่น"
+                placeholder="Search by name, age, or nickname"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 className="search-input"
@@ -261,7 +261,7 @@ export default function App() {
               pagination={false}
               rowHoverable={false}
               scroll={{ x: 860 }}
-              locale={{ emptyText: <Empty description="ยังไม่มีข้อมูลผู้ใช้" /> }}
+              locale={{ emptyText: <Empty description="No users found" /> }}
               rowClassName={(record, index) => {
                 if (record.id === editingId) return 'editing-row';
                 return index % 2 === 0 ? 'user-row-even' : 'user-row-odd';
@@ -276,8 +276,8 @@ export default function App() {
             <Flex align="center" gap={12}>
               <span className="icon-tile modal-icon"><UserAddOutlined /></span>
               <div>
-                <Title level={4}>เพิ่มสมาชิกใหม่</Title>
-                <Text type="secondary">กรอกข้อมูลให้ครบทั้ง 3 ช่อง</Text>
+                <Title level={4}>Add New Person</Title>
+                <Text type="secondary">Complete all three fields below</Text>
               </div>
             </Flex>
           }
@@ -290,24 +290,24 @@ export default function App() {
           width={520}
         >
           <Form form={addForm} layout="vertical" onFinish={addUser} requiredMark={false} className="add-form">
-            <Form.Item label="ชื่อ" name="name" rules={[{ required: true, whitespace: true, message: 'กรุณากรอกชื่อ' }]}>
-              <Input placeholder="เช่น สมชาย ใจดี" maxLength={60} autoFocus />
+            <Form.Item label="Name" name="name" rules={[{ required: true, whitespace: true, message: 'Please enter a name' }]}>
+              <Input placeholder="e.g. Alex Morgan" maxLength={60} autoFocus />
             </Form.Item>
-            <Form.Item label="อายุ" name="age" rules={[{ required: true, message: 'กรุณากรอกอายุ' }]}>
+            <Form.Item label="Age" name="age" rules={[{ required: true, message: 'Please enter an age' }]}>
               <InputNumber placeholder="18" min={1} max={120} className="full-width" />
             </Form.Item>
-            <Form.Item label="ชื่อเล่น" name="nickname" rules={[{ required: true, whitespace: true, message: 'กรุณากรอกชื่อเล่น' }]}>
-              <Input placeholder="เช่น บอล" maxLength={40} />
+            <Form.Item label="Nickname" name="nickname" rules={[{ required: true, whitespace: true, message: 'Please enter a nickname' }]}>
+              <Input placeholder="e.g. Alex" maxLength={40} />
             </Form.Item>
             <Flex justify="flex-end" gap={10} className="modal-actions">
               <Button onClick={() => {
                 setIsAddModalOpen(false);
                 addForm.resetFields();
               }}>
-                ยกเลิก
+                Cancel
               </Button>
               <Button type="primary" htmlType="submit" icon={<PlusOutlined />}>
-                เพิ่มผู้ใช้
+                Add Person
               </Button>
             </Flex>
           </Form>
